@@ -4,43 +4,41 @@ using UnityEngine;
 
 public class SoulFarm : MonoBehaviour
 {
+    public GameObject soulManagerGameObject;
     public GameObject farmTriggerObject;
     public GameObject player;
 
     SoulFarmTrigger farmTrigger;
     SoulPieceMovement soulPieceMovement;
-    SoulManager _soulManager;
+    SoulManager soulManager;
+    IdleSoul idleSoul;
 
+    List<GameObject> souls = new List<GameObject>();
 
     public void Start(){
         farmTrigger = GetComponentInChildren<SoulFarmTrigger>();
-
+        soulManager = soulManagerGameObject.GetComponent<SoulManager>();
+        
     }
 
     public void Update(){
-
         
 
-        Vector3 targetPosition;
-
-        var x = Random.Range(-10, 10);
-        var y = Random.Range(-10, 10);
-        var z = 0;
-        targetPosition = new Vector3(x, y, z);
-
-        if(farmTrigger.playerIsInFarm && Input.GetKeyDown("e")){
-            foreach(GameObject soul in _soulManager.soulsInParty){
-                soulPieceMovement.SoulTarget(targetPosition, 0.03f);
-            }
+        if(farmTrigger.playerIsInFarm && Input.GetKeyDown("x")){
+            StopSoulInFarm();
         }
     }
 
-    void GetSoulsInParty(){
+    public void StopSoulInFarm(){
         var componentsHaveBeenRetrieved = false;
         if(!componentsHaveBeenRetrieved){
-            foreach(GameObject soul in _soulManager.soulsInParty){
-            soulPieceMovement = soul.GetComponent<SoulPieceMovement>();
-            componentsHaveBeenRetrieved = true;
+            foreach(GameObject soul in soulManager.soulsInParty){
+                soulPieceMovement = soul.GetComponent<SoulPieceMovement>();
+                idleSoul = soul.GetComponent<IdleSoul>();
+                soulPieceMovement.playerHasCollidedWithSoul = false;
+                soulPieceMovement.RemoveSoulFromPartyList();
+                idleSoul.soulIsIdleInFarm = true;
+                componentsHaveBeenRetrieved = true;
             }
         }
     }

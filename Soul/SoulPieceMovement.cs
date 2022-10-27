@@ -10,7 +10,9 @@ public class SoulPieceMovement : MonoBehaviour
     Rigidbody2D soulRigidBody;
 
     public GameObject soulConverterGameObject;
+
     SoulConverter soulConverter;
+    
 
     public float minimumDistanceToPlayer = 1f;
     private float soulCurrentSpeed = 45f;
@@ -20,7 +22,7 @@ public class SoulPieceMovement : MonoBehaviour
     public bool soulIsFollowingPlayer = false;
     public bool soulHasBeenAddedToList;
 
-    private float soulDistanceToPlayerRadius = 2f;
+    private float soulDistanceToPlayerRadius = 1.7f;
     public float soulSpeed;
 
     public bool playerIsNotMoving;
@@ -76,6 +78,8 @@ public class SoulPieceMovement : MonoBehaviour
 
             if (playerHasCollidedWithSoul && distance > soulDistanceToPlayerRadius){
                 SoulTarget(playerPosition, soulSpeed);
+            } else if(!playerHasCollidedWithSoul){
+                SoulTarget(soulPosition, 0);
             }
     }
 
