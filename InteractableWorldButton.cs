@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class InteractableWorldButton : MonoBehaviour
 {
+
     GameObject player;
     Vector2 playerPosition;
     public float distanceToObject;
@@ -24,7 +25,7 @@ public class InteractableWorldButton : MonoBehaviour
             playerHasEngagedWithObject = true;
         } else if(distanceToObject >= distanceToInteract || Input.GetKeyUp("e")){
             playerHasEngagedWithObject = false;
-        }else if(Input.GetKey("e")){
+        } else if(Input.GetKey("e")){
             playerHasEngagedWithObject = false;
         }
     }

@@ -22,7 +22,7 @@ public class SoulPieceMovement : MonoBehaviour
     public bool soulIsFollowingPlayer = false;
     public bool soulHasBeenAddedToList;
 
-    private float soulDistanceToPlayerRadius = 1.7f;
+    private float soulDistanceToPlayerRadius = 1.4f;
     public float soulSpeed;
 
     public bool playerIsNotMoving;
@@ -30,6 +30,8 @@ public class SoulPieceMovement : MonoBehaviour
 
 
     void Awake(){
+
+        
         player = GameObject.FindWithTag("Player");
         playerMovementManager = player.GetComponent<PlayerMovementManager>();
         soulRigidBody = gameObject.GetComponent<Rigidbody2D>();
@@ -51,6 +53,9 @@ public class SoulPieceMovement : MonoBehaviour
         gameObject.transform.position = Vector3.MoveTowards(soulPosition, target, speed);
 
         if( speed > 0.07f){
+            speed = 0.07f;
+        }
+        if(speed == null){
             speed = 0.07f;
         }
     }

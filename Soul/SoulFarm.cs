@@ -36,8 +36,9 @@ public class SoulFarm : MonoBehaviour
                 soulPieceMovement = soul.GetComponent<SoulPieceMovement>();
                 idleSoul = soul.GetComponent<IdleSoul>();
                 soulPieceMovement.playerHasCollidedWithSoul = false;
-                soulPieceMovement.RemoveSoulFromPartyList();
+                soulPieceMovement.soulIsFollowingPlayer = false;
                 idleSoul.soulIsIdleInFarm = true;
+                idleSoul.BeginWander();
                 componentsHaveBeenRetrieved = true;
             }
         }
