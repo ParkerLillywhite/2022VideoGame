@@ -22,8 +22,6 @@ public class SoulFarm : MonoBehaviour
     }
 
     public void Update(){
-        
-
         if(farmTrigger.playerIsInFarm && Input.GetKeyDown("x")){
             StopSoulInFarm();
         }
@@ -37,6 +35,8 @@ public class SoulFarm : MonoBehaviour
                 idleSoul = soul.GetComponent<IdleSoul>();
                 soulPieceMovement.playerHasCollidedWithSoul = false;
                 soulPieceMovement.soulIsFollowingPlayer = false;
+                soulPieceMovement.gracePeriodIsActive = true;
+                soulPieceMovement.InvokeGracePeriod();
                 idleSoul.soulIsIdleInFarm = true;
                 idleSoul.BeginWander();
                 componentsHaveBeenRetrieved = true;

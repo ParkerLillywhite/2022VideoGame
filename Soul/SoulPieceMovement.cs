@@ -26,12 +26,10 @@ public class SoulPieceMovement : MonoBehaviour
     public float soulSpeed;
 
     public bool playerIsNotMoving;
-
+    public bool gracePeriodIsActive;
 
 
     void Awake(){
-
-        
         player = GameObject.FindWithTag("Player");
         playerMovementManager = player.GetComponent<PlayerMovementManager>();
         soulRigidBody = gameObject.GetComponent<Rigidbody2D>();
@@ -41,10 +39,18 @@ public class SoulPieceMovement : MonoBehaviour
     }
 
     void FixedUpdate(){
-        if(!soulConverter.soulsAreMovingToTheirDoom){
+        if(!soulConverter.soulsAreMovingToTheirDoom && !gracePeriodIsActive){
             SoulFollowsPlayerOnceEngaged();
         }
+    }
 
+    public void InvokeGracePeriod(){
+        float gracePeriodTimer = 5.0f;
+        Invoke("GracePeriod", gracePeriodTimer);
+    }
+
+    void GracePeriod(){
+        gracePeriodIsActive = false;
     }
 
     public void SoulTarget(Vector3 target, float speed){
