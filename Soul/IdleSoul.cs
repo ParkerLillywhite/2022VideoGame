@@ -12,27 +12,36 @@ public class IdleSoul : MonoBehaviour
     SoulFarm soulFarm;
 
     public float speedToRandomTarget;
-
     public bool soulIsIdleInFarm;
-    [SerializeField] Vector3 targetPosition;
+    public bool soulIsCollidingWithTrigger;
 
-    void Awake(){
+    [SerializeField] Vector3 targetPosition;
+    [SerializeField] bool inPlayerRadius;
+    int soulPieceMaxDistance = 20;
+    
+
+    void Start(){
         soulPieceMovement = gameObject.GetComponent<SoulPieceMovement>();
         soulFarm = soulFarmGameObject.GetComponent<SoulFarm>();
         rigidBody = gameObject.GetComponent<Rigidbody2D>();
 
         speedToRandomTarget = 0.07f * Time.deltaTime;
+
+        SoulFarmEventManager.IdleSoulEvent += BeginWander;
     }
 
     void Update(){
         if(soulPieceMovement.soulIsFollowingPlayer){
             soulIsIdleInFarm = false;
         }
-        if(!soulIsIdleInFarm){
+        if(!soulIsIdleInFarm || !soulIsCollidingWithTrigger){
             StopCoroutine(Wander());
         }
         if(soulIsIdleInFarm){
             soulPieceMovement.SoulTarget(targetPosition, speedToRandomTarget);
+        }
+        if(!soulPieceMovement.soulIsFollowingPlayer && soulIsCollidingWithTrigger){
+            soulIsIdleInFarm = true;
         }
     }
 
@@ -44,8 +53,7 @@ public class IdleSoul : MonoBehaviour
         StopCoroutine(Wander());
     }
 
-    public IEnumerator Wander(){  
-        
+    private IEnumerator Wander(){  
         while(soulIsIdleInFarm){
             Vector3 target = getTargetPosition();  
             int number = Random.Range(1,20);
@@ -81,5 +89,29 @@ public class IdleSoul : MonoBehaviour
         int z = 0;
         Vector3 randomPos = new Vector3(x, y, z);
         return randomPos;
+    }
+
+    void OnTriggerEnter2D(Collider2D other){
+        if(other.tag == "SoulTrigger"){
+            soulIsCollidingWithTrigger = true;
+        }
+        if(other.tag == "PlayerMaxDistanceTrigger"){
+            inPlayerRadius = true;
+        }
+
+    }
+
+    void OnTriggerExit2D(Collider2D other){
+        if(other.tag == "SoulTrigger"){
+            soulIsCollidingWithTrigger = false;
+        }
+        if(other.tag == "PlayerMaxDistanceTrigger" && soulIsCollidingWithTrigger){
+            BeginWander();
+            inPlayerRadius = false;
+        }
+    }
+
+    private void OnDisable(){
+        SoulFarmEventManager.IdleSoulEvent -= BeginWander;
     }
 }

@@ -12,7 +12,7 @@ public class SoulPieceMovement : MonoBehaviour
     public GameObject soulConverterGameObject;
 
     SoulConverter soulConverter;
-    
+    IdleSoul idleSoul;
 
     public float minimumDistanceToPlayer = 1f;
     private float soulCurrentSpeed = 45f;
@@ -36,6 +36,7 @@ public class SoulPieceMovement : MonoBehaviour
 
         soulConverterGameObject = GameObject.Find("SoulConverter");
         soulConverter = soulConverterGameObject.GetComponent<SoulConverter>();
+        idleSoul = gameObject.GetComponent<IdleSoul>();
     }
 
     void FixedUpdate(){
@@ -67,6 +68,7 @@ public class SoulPieceMovement : MonoBehaviour
     }
 
     public void SoulFollowsPlayerOnceEngaged(){
+        int maxDistance = 15;
         Vector2 playerPosition = new Vector2(player.transform.position.x, player.transform.position.y);
         var soulPosition = gameObject.transform.position;
         distance = Vector2.Distance(playerPosition, soulPosition);
@@ -77,10 +79,11 @@ public class SoulPieceMovement : MonoBehaviour
                 playerHasCollidedWithSoul = true;
                 soulIsFollowingPlayer = true;
                 AddSoulToPartyList();
-            } else if(distance >= 20){
+            } else if(distance >= maxDistance){
                 playerHasCollidedWithSoul = false;
                 soulIsFollowingPlayer = false;
                 RemoveSoulFromPartyList();
+                
             }
 
             if(soulSpeed > 0.07f){

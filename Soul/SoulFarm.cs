@@ -28,6 +28,7 @@ public class SoulFarm : MonoBehaviour
     }
 
     public void StopSoulInFarm(){
+        //this list is not removing soul from the party. throws exception when you call RemoveSoulFromPartyList() from exeecutng within the foreach loop accessing the same List.
         var componentsHaveBeenRetrieved = false;
         if(!componentsHaveBeenRetrieved){
             foreach(GameObject soul in soulManager.soulsInParty){
@@ -35,8 +36,10 @@ public class SoulFarm : MonoBehaviour
                 idleSoul = soul.GetComponent<IdleSoul>();
                 soulPieceMovement.playerHasCollidedWithSoul = false;
                 soulPieceMovement.soulIsFollowingPlayer = false;
+                
                 soulPieceMovement.gracePeriodIsActive = true;
                 soulPieceMovement.InvokeGracePeriod();
+        
                 idleSoul.soulIsIdleInFarm = true;
                 idleSoul.BeginWander();
                 componentsHaveBeenRetrieved = true;
